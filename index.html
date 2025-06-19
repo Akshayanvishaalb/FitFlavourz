@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fit Flavourz - Product Catalog</title>
+    <link rel="icon" type="icon" href="Fit Flavourz.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .logo-container {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 10px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .logo-container {
+                top: 15px;
+                left: 15px;
+                padding: 8px;
+            }
+            
+            .logo {
+                width: 45px;
+                height: 45px;
+            }
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #2A7B9B;
+            background: linear-gradient(90deg,rgba(42, 123, 155, 1) 0%, rgba(87, 199, 133, 1) 50%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+
+        .product-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(45deg, #f0f2f5, #e1e8ed);
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #667eea;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-image::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .product-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+
+        .product-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        .product-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .product-price {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .product-weight {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        }
+
+        .specs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .spec-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .spec-label {
+            font-weight: 600;
+            color: #495057;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .spec-value {
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        /* Enhanced Footer Styles */
+        .footer {
+            background: #000;
+            color: white;
+            padding: 50px 0 30px;
+            margin-top: 60px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 60px;
+            margin-bottom: 40px;
+            align-items: start;
+        }
+
+        .footer-logo-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .footer-logo img{
+            border-radius: 50px;
+            margin-left: 50px;
+        }
+
+        .footer-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: #fff;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #333;
+            display: inline-block;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: #333;
+            border-radius: 50%;
+            color: #4CAF50;
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: #4CAF50;
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .contact-info {
+            list-style: none;
+            padding: 0;
+        }
+
+        .contact-info li {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #ccc;
+            font-size: 1rem;
+        }
+
+        .contact-info li .icon {
+            color: #4CAF50;
+            font-size: 1.2rem;
+            min-width: 20px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 30px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #ccc;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #4CAF50;
+        }
+
+        .copyright {
+            color: #ccc;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+                text-align: center;
+            }
+
+            .footer-info-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .footer-logo-section {
+                align-items: center;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-links {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Fit Flavourz - Products</h1>
+            <p>Discover our carefully curated selection of exceptional products</p>
+        </header>
+        <div class="logo-container">
+            <img src="Fit Flavourz.png" alt="Fit Flavourz Logo" class="logo">
+        </div>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-image"><img src = "p1.png"></div>
+                <h3 class="product-title">Millet Brownie</h3>
+                <p class="product-description"></p>
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <span class="spec-label"></span>
+                        <span class="spec-value"></span>
+                    </div>
+                </div>
+                <div class="product-details">
+                    <div class="product-price">Price</div>
+                    <div class="product-weight">Weight</div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image"><img src="p6.jpeg"></div>
+                <h3 class="product-title">Wheat Flakes Muesli</h3>
+                <p class="product-description"></p>
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <span class="spec-label"></span>
+                        <span class="spec-value"></span>
+                    </div>
+                </div>
+                <div class="product-details">
+                    <div class="product-price">Price</div>
+                    <div class="product-weight">Weight</div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image"><img src="p3.jpeg"></div>
+                <h3 class="product-title">Millet Murukku</h3>
+                <p class="product-description"></p>
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <span class="spec-label"></span>
+                        <span class="spec-value"></span>
+                    </div>
+                </div>
+                <div class="product-details">
+                    <div class="product-price">Price</div>
+                    <div class="product-weight">Weight</div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image"><img src="millet.jpeg"></div>
+                <h3 class="product-title">Millet Laddu</h3>
+                <p class="product-description"></p>
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <span class="spec-label"></span>
+                        <span class="spec-value"></span>
+                    </div>
+                </div>
+                <div class="product-details">
+                    <div class="product-price">Price</div>
+                    <div class="product-weight">Weight</div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image"><img src="p4.jpeg"></div>
+                <h3 class="product-title">Nutri Millet Dosa Mix</h3>
+                <p class="product-description"></p>
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <span class="spec-label"></span>
+                        <span class="spec-value"></span>
+                    </div>
+                </div>
+                <div class="product-details">
+                    <div class="product-price">Price</div>
+                    <div class="product-weight">Weight</div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image"><img src="p5.jpeg"></div>
+                <h3 class="product-title">Millet Thenkuzhal</h3>
+                <p class="product-description"></p>
+                <div class="specs-grid">
+                    <div class="spec-item">
+                        <span class="spec-label"></span>
+                        <span class="spec-value"></span>
+                    </div>
+                </div>
+                <div class="product-details">
+                    <div class="product-price">Price</div>
+                    <div class="product-weight">Weight</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-grid">
+            <div class="footer-logo-section">
+                <div class="footer-logo">
+                    <img src="Fit Flavourz.png" width="150">
+                </div>
+            </div>
+
+            <div class="footer-info-grid">
+                <div class="footer-section">
+                    <h3>Follow us</h3>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/fitflavourz.india/" class="social-link" title="Instagram">📷</a>
+                        <a href="https://wa.me/7094700519" class="social-link" title="WhatsApp">💬</a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h3>Contact Us</h3>
+                    <ul class="contact-info">
+                        <li>
+                            <span class="icon">📞</span>
+                            <span>Call: +91 7094700519</span>
+                        </li>
+                        <li>
+                            <span class="icon">🕒</span>
+                            <span>9AM - 9PM Mon - Sun</span>
+                        </li>
+                        <li>
+                            <span class="icon">✉️</span>
+                            <span>vruthispicesinternationalllp@gmail.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div class="copyright">
+                <p>&copy; 2025 - Fit Flavourz - All Rights Reserved</p>
+            </div>
+            <div class="footer-links">
+                <a href="#">Privacy Policy</a>
+                <a href="#">Terms of Service</a>
+                <a href="#">Sitemap</a>
+            </div>
+        </div>
+    </div>
+</footer>
+</body>
+</html>
